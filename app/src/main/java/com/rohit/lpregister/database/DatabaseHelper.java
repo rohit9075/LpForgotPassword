@@ -86,6 +86,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+    public boolean checkCandidateForPassworedReset( String email , String mobile)
+    {
+        // array of columns to fetch
+        String[] columns = {Constants.COLUMN_CANDIDATE_EMAIL , Constants.COLUMN_CANDIDATE_PHONE};
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // selection criteria
+
+        String selection = Constants.COLUMN_CANDIDATE_EMAIL + " = ?" + " AND " + Constants.COLUMN_CANDIDATE_PHONE + " = ?";
+
+        // selection argument
+        String[] selectionArgs = {email , mobile};
+
+        // query candidate table with condition
+        /*
+         * Here query function is used to fetch records from candidate table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id FROM candidate WHERE user_email = 'jack@androidtutorialshub.com';
+         */
+        Cursor cursor = db.query(Constants.TABLE_CANDIDATE,columns,selection,selectionArgs,null, null, null);
+        int cursorCount = cursor.getCount();
+        cursor.close();
+        db.close();
+
+        Toast.makeText(mContext, "Called", Toast.LENGTH_SHORT).show();
+        return cursorCount > 0;
+
+    }
+
+
+
+
     public boolean checkCandidate(String email, String password) {
 
         // array of columns to fetch
@@ -161,6 +193,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        }
 //        return false;
 //    }
+
+
+    public boolean updateCandidatePassword(String  email , String password) {
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        //values.put(COLUMN_CANDIDATE_ID,candidate.getId());
+        values.put(Constants.COLUMN_CANDIDATE_PASSWORD,password);
+
+
+        // updating row
+        /*db.update(TABLE_CAN, values,null,null);
+        db.close();*/
+
+        return db.update(Constants.TABLE_CANDIDATE,
+                values,
+                Constants.COLUMN_CANDIDATE_EMAIL + "=?",
+                new String[]{email}) == 1;
+
+    }
+
+
+
 //    public List<User> getAllUser() {
 //        String[] columns = {
 //                COLUMN_CANDIDATE_ID,

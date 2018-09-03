@@ -113,6 +113,8 @@ public class LoginActivity extends AppCompatActivity  implements View.OnClickLis
                 break;
 
             case R.id.textView_forgot_password:
+                Intent mIntentForgotPassword = new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                startActivity(mIntentForgotPassword);
                 break;
         }
 
